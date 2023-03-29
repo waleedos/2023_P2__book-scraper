@@ -64,3 +64,13 @@ list_links_categories = []
 for link in links_categories[1:]:
     link = url_base + link["href"]
     list_links_categories.append(link)
+
+    # La variable "category_name" contient le nom de la catégorie, qui est extrait à partir de la balise "h1" du contenu HTML de la page.
+    category_name = soup_category.h1.string
+
+    # La variable "list_links_products_pages" contient la liste des liens de chaque page de produits pour cette catégorie. Cette variable 
+    # est remplie en appelant une fonction personnalisée "parse_links_products_pages" qui prend comme argument le lien de la page de 
+    # catégorie et renvoie la liste de liens pour chaque page de produits de cette catégorie.
+    list_links_products_pages = parse_links_products_pages(link_category)
+
+    
