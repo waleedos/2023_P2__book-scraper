@@ -56,21 +56,24 @@ categories_div = soup.find("div", class_="side_categories")
 # Utilisation de la méthode "find_all" de l'objet "categories_div" pour récupérer tous les liens "a" contenus dans la variable categories_div.
 links_categories = categories_div.find_all("a")
 
-# La variable "list_links_categories" est une liste vide qui est ensuite remplie en utilisant une boucle "for" pour 
-# parcourir chaque élément de "links_categories" à partir du deuxième élément, qui est ignoré. Dans chaque itération 
-# de la boucle, la variable "link" est mise à jour en concaténant l'URL de base avec l'attribut "href" de l'élément "a". 
-# Ensuite, le lien mis à jour est ajouté à la liste "list_links_categories"."""
 list_links_categories = []
 for link in links_categories[1:]:
     link = url_base + link["href"]
     list_links_categories.append(link)
 
-    # La variable "category_name" contient le nom de la catégorie, qui est extrait à partir de la balise "h1" du contenu HTML de la page.
-    category_name = soup_category.h1.string
+# La variable "list_links_categories" est une liste vide qui est ensuite remplie en utilisant une boucle "for" pour parcourir chaque élément 
+# de "links_categories" à partir du deuxième élément, qui est ignoré. Dans chaque itération de la boucle, la variable "link" est mise à jour 
+# en concaténant l'URL de base avec l'attribut "href" de l'élément "a". Ensuite, le lien mis à jour est ajouté à la liste "list_links_categories".
+list_links_categories = []
+for link in links_categories[1:]:
+    link = url_base + link["href"]
+    list_links_categories.append(link)
 
-    # La variable "list_links_products_pages" contient la liste des liens de chaque page de produits pour cette catégorie. Cette variable 
-    # est remplie en appelant une fonction personnalisée "parse_links_products_pages" qui prend comme argument le lien de la page de 
-    # catégorie et renvoie la liste de liens pour chaque page de produits de cette catégorie.
-    list_links_products_pages = parse_links_products_pages(link_category)
+# Utilisation d’une boucle "for" qui parcourt chaque élément de la liste "list_links_categories". Pour chaque lien de catégorie, une requête "GET" 
+# est envoyée avec le module "requests" pour récupérer le contenu "HTML" de la page. Le contenu "HTML" est ensuite analysé avec 
+# le module "BeautifulSoup" et stocké dans la variable "soup_category". 
+# Parse categories links
+for link_category in list_links_categories:
+    link_response = requests.get(link_category)
+    soup_category = BeautifulSoup(link_response.content, "html.parser")
 
-    
