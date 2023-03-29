@@ -32,7 +32,6 @@ def parse_links_products_pages():
         du site web)."""
         link_product_page = "https://books.toscrape.com/catalogue/" + item.a["href"][9:]
 
-
         """Le lien du produit est ajouté à la liste "list_links_products_pages", qui contiendra 
         tous les liens vers les pages des produits."""
         list_links_products_pages.append(link_product_page)
@@ -41,16 +40,12 @@ def parse_links_products_pages():
     return list_links_products_pages
 
 
-
 """Déclaration de variable "url_base" qui contient l'URL de base pour le site "http://books.toscrape.com/"."""
 url_base = "https://books.toscrape.com/catalogue/category/books/romance_8/page-1.html"
-
-
 
 """La variable "page" utilise le module requests pour envoyer une requête GET au site "http://books.toscrape.com/" 
 et stocke la réponse dans la variable "page"."""
 page = requests.get(url_base)
-
 
 """La variable "soup" utilise le module BeautifulSoup pour parser le contenu HTML de la page et stocke le résultat 
 dans une variable soup."""
