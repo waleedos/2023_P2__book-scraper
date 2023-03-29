@@ -77,3 +77,16 @@ for link_category in list_links_categories:
     link_response = requests.get(link_category)
     soup_category = BeautifulSoup(link_response.content, "html.parser")
 
+    # La variable "category_name" contient le nom de la catégorie, qui est extrait à partir de la balise "h1" du contenu HTML de la page.
+    category_name = soup_category.h1.string
+
+    # La variable "list_links_products_pages" contient la liste des liens de chaque page de produits pour cette catégorie. Cette variable 
+    # est remplie en appelant une fonction personnalisée "parse_links_products_pages" qui prend comme argument le lien de la page de 
+    # catégorie et renvoie la liste de liens pour chaque page de produits de cette catégorie.
+    list_links_products_pages = parse_links_products_pages(link_category)
+
+    # La variable list_next_pages est une liste vide qui sera utilisée pour stocker les liens des prochaines pages de produits. 
+    list_next_pages = []
+
+    # La variable "first_next_page" utilise la méthode "find" de l'objet "soup_category" pour trouver la première balise "a" ayant le texte "next". 
+    first_next_page = soup_category.find("a", string="next")
