@@ -3,7 +3,6 @@ import requests
 from bs4 import BeautifulSoup
 import re	
 
-
 """La fonction "parse_links_products_pages" commence par envoyer une requête HTTP à l'URL 
 spécifiée en utilisant la méthode "get" de l'objet "requests" et en stockant la réponse dans 
 la variable "page". Cette réponse est ensuite passée en argument à la méthode "BeautifulSoup" 
@@ -51,3 +50,8 @@ page = requests.get(url_base)
 dans une variable soup."""
 soup = BeautifulSoup(page.content, "html.parser")
 
+"""La variable "categories_div" utilise la méthode "find "de l'objet "soup" pour rechercher un élément "div" ayant une classe "side_categories"."""
+categories_div = soup.find("div", class_="side_categories")
+
+"""Utilisation de la méthode "find_all" de l'objet "categories_div" pour récupérer tous les liens "a" contenus dans la variable categories_div."""
+links_categories = categories_div.find_all("a")
