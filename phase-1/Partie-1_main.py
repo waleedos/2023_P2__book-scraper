@@ -2,6 +2,7 @@ import os
 import requests
 from bs4 import BeautifulSoup
 import re	
+import csv
 
 ###### LA FONCTION : parse_links_products_pages(): ######
 #-------------------------------------------------------#
