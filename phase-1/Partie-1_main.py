@@ -3,6 +3,9 @@ import requests
 from bs4 import BeautifulSoup
 import re	
 
+###### LA FONCTION : parse_links_products_pages(): ######
+#-------------------------------------------------------#
+
 # La fonction "parse_links_products_pages" commence par envoyer une requête HTTP à l'URL 
 # spécifiée en utilisant la méthode "get" de l'objet "requests" et en stockant la réponse dans 
 # la variable "page". Cette réponse est ensuite passée en argument à la méthode "BeautifulSoup" 
@@ -37,7 +40,78 @@ def parse_links_products_pages():
 
     # Enfin, la liste des liens de produits est renvoyée à l'appelant de la fonction."""        
     return list_links_products_pages
+#-------------------------------------------------------#
+###### LA FONCTION : parse_product_page(url_product): ######
+#-------------------------------------------------------#
+# La fonction nommée "parse_product_page" qui prend en entrée une URL de produit (variable "url_product") et qui retourne 
+# trois variables en sortie : "product_page_info", "image_url_text" et "universal_product_code".
 
+# La fonction commence par faire une requête à l'URL donnée en utilisant la bibliothèque "requests" et stocke la réponse 
+# dans la variable "page_response". Elle utilise ensuite la bibliothèque "BeautifulSoup" pour analyser le contenu HTML de 
+# la page en question, et stocke le résultat dans la variable "soup_page".
+def parse_product_page(url_product):
+    page_response = requests.get(url_product)
+    soup_page = BeautifulSoup(page_response.content, 'html.parser')
+
+    # Définition d’une variable "product_page_url" en lui donnant la valeur de "url_product".
+    product_page_url = url_product
+    # Trouver l'élément HTML contenant le code produit universel (UPC) et stocke sa valeur dans la variable "universal_product_code".
+    universal_product_code = soup_page.find(string="UPC").next_element.string
+
+    # Trouver l'élément HTML contenant le titre du produit et stocke sa valeur dans la variable "title".
+    title = soup_page.h1.string
+
+    # Pour trouver les éléments HTML contenant le prix du produit incluant et excluant la taxe, et stockent leur valeur 
+    # respective dans les variables "price_including_tax" et "price_excluding_tax".
+    price_including_tax = soup_page.find(string="Price (incl. tax)").next_element.string
+    price_excluding_tax = soup_page.find(string="Price (excl. tax)").next_element.string
+
+    # La ligne suivante utilise la méthode find() de BeautifulSoup pour trouver l'élément HTML contenant 
+    # le texte "instock availability", puis la méthode get_text() pour extraire le texte brut de l'élément. 
+    # Ce texte est ensuite nettoyé en utilisant la méthode strip() et stocké dans la variable "number_available_text". 
+    # La ligne suivante utilise une expression régulière pour extraire le nombre d'articles disponibles à partir 
+    # de ce texte et stocke le résultat dans la variable "number_available".
+    number_available_text = soup_page.find("p", class_="instock availability").get_text().strip()
+    number_available = re.search(" \((.*) available", number_available_text)
+    number_available = number_available.group(1)
+
+    # Pour trouver  l'élément HTML contenant la description du produit, s'il existe, et stockent sa valeur 
+    # dans la variable "product_description". Elles trouvent également l'élément HTML contenant la catégorie du produit 
+    # en utilisant la méthode find_all() de BeautifulSoup, puis stockent la valeur de la troisième balise <a> dans la variable "category".
+    product_description_div = soup_page.find(id="product_description")
+    product_description = ""
+    if product_description_div:
+        product_description = product_description_div.find_next("p").string
+
+    breadcrumb = soup_page.find('ul', class_='breadcrumb')
+    list_breadcrumb = breadcrumb.find_all("a")
+    category = list_breadcrumb[2].string
+
+    # Pour trouver l’element HTML contenant la note de l'examen (review_rating) du produit et stocke sa valeur dans la variable "review_rating".
+    review_rating = soup_page.find("p", class_="star-rating")["class"][1]
+
+
+    # La ligne suivante trouve l'élément HTML contenant l'URL de l'image du produit et stocke sa valeur dans la variable "image_url". 
+    # La ligne suivante construit l'URL complète de l'image en utilisant la concaténation de chaînes de caractères, en ajoutant le nom 
+    # de domaine "https://books.toscrape.com" et en enlevant les cinq premiers caractères de la valeur de "src" dans "image_url".
+    image_url = soup_page.find("div", class_="carousel-inner").find_next("img")
+    image_url_text = "https://books.toscrape.com" + image_url["src"][5:]
+
+    product_page_info = [
+        product_page_url,
+        universal_product_code,
+        title,
+        price_including_tax,
+        price_excluding_tax,
+        number_available,
+        product_description,
+        category,
+        review_rating,
+        image_url_text
+    ]
+    # Création d'une liste contenant toutes les informations extraites du produit, puis retourne cette liste, l'URL de l'image et 
+    # le code produit universel.
+    return product_page_info, image_url_text, universal_product_code
 
 # Déclaration de variable "url_base" qui contient l'URL de base pour le site "http://books.toscrape.com/".
 url_base = "https://books.toscrape.com/catalogue/category/books/romance_8/page-1.html"
@@ -69,24 +143,3 @@ for link in links_categories[1:]:
     link = url_base + link["href"]
     list_links_categories.append(link)
 
-# Utilisation d’une boucle "for" qui parcourt chaque élément de la liste "list_links_categories". Pour chaque lien de catégorie, une requête "GET" 
-# est envoyée avec le module "requests" pour récupérer le contenu "HTML" de la page. Le contenu "HTML" est ensuite analysé avec 
-# le module "BeautifulSoup" et stocké dans la variable "soup_category". 
-# Parse categories links
-for link_category in list_links_categories:
-    link_response = requests.get(link_category)
-    soup_category = BeautifulSoup(link_response.content, "html.parser")
-
-    # La variable "category_name" contient le nom de la catégorie, qui est extrait à partir de la balise "h1" du contenu HTML de la page.
-    category_name = soup_category.h1.string
-
-    # La variable "list_links_products_pages" contient la liste des liens de chaque page de produits pour cette catégorie. Cette variable 
-    # est remplie en appelant une fonction personnalisée "parse_links_products_pages" qui prend comme argument le lien de la page de 
-    # catégorie et renvoie la liste de liens pour chaque page de produits de cette catégorie.
-    list_links_products_pages = parse_links_products_pages(link_category)
-
-    # La variable list_next_pages est une liste vide qui sera utilisée pour stocker les liens des prochaines pages de produits. 
-    list_next_pages = []
-
-    # La variable "first_next_page" utilise la méthode "find" de l'objet "soup_category" pour trouver la première balise "a" ayant le texte "next". 
-    first_next_page = soup_category.find("a", string="next")
