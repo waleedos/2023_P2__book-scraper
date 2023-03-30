@@ -1,8 +1,8 @@
 import os
 import requests
 from bs4 import BeautifulSoup
-import re	
 import csv
+import re	
 
 ###### LA FONCTION : parse_links_products_pages(): ######
 #-------------------------------------------------------#
@@ -13,7 +13,7 @@ import csv
 # pour créer un objet "soup_product_page" qui contient la structure HTML de la page."""
 # Parse URLs links of product pages for the category "Romance"
 def parse_links_products_pages():
-    url = "https://books.toscrape.com/catalogue/category/books/romance_8/page-1.html"
+    url = "https://books.toscrape.com/catalogue/category/books/childrens_11/page-1.html"
     page = requests.get(url)
     soup_product_page = BeautifulSoup(page.content, "html.parser")
     
@@ -115,7 +115,7 @@ def parse_product_page(url_product):
     return product_page_info, image_url_text, universal_product_code
 
 # Déclaration de variable "url_base" qui contient l'URL de base pour le site "http://books.toscrape.com/".
-url_base = "https://books.toscrape.com/catalogue/category/books/romance_8/page-1.html"
+url_base = "https://books.toscrape.com/catalogue/category/books/childrens_11/page-1.html"
 
 # La variable "page" utilise le module requests pour envoyer une requête GET au site "http://books.toscrape.com/" 
 # et stocke la réponse dans la variable "page".
@@ -131,11 +131,6 @@ categories_div = soup.find("div", class_="side_categories")
 # Utilisation de la méthode "find_all" de l'objet "categories_div" pour récupérer tous les liens "a" contenus dans la variable categories_div.
 links_categories = categories_div.find_all("a")
 
-list_links_categories = []
-for link in links_categories[1:]:
-    link = url_base + link["href"]
-    list_links_categories.append(link)
-
 # La variable "list_links_categories" est une liste vide qui est ensuite remplie en utilisant une boucle "for" pour parcourir chaque élément 
 # de "links_categories" à partir du deuxième élément, qui est ignoré. Dans chaque itération de la boucle, la variable "link" est mise à jour 
 # en concaténant l'URL de base avec l'attribut "href" de l'élément "a". Ensuite, le lien mis à jour est ajouté à la liste "list_links_categories".
@@ -143,4 +138,34 @@ list_links_categories = []
 for link in links_categories[1:]:
     link = url_base + link["href"]
     list_links_categories.append(link)
+
+# Parse categories links
+list_links_products_pages = parse_links_products_pages()
+
+# Create result directory
+if not os.path.exists("result"):
+    os.makedirs("result")
+
+# Create CSV file
+en_tete = [
+    "product_page_url",
+    "universal_product_code",
+    "title",
+    "price_including_tax",
+    "price_excluding_tax",
+    "number_available",
+    "product_description",
+    "category",
+    "review_rating",
+    "image_url_text",
+]
+
+category_name = "Romance"
+with open("result/data_" + category_name + ".csv", "w", newline="", encoding="utf-8") as fichier_csv:
+    writer = csv.writer(fichier_csv, delimiter=",")
+    writer.writerow(en_tete)
+    for link_product in list_links_products_pages:
+        # Function parse product information in product page
+        product_info = parse_product_page(link_product)
+        writer.writerow(product_info[0])
 
