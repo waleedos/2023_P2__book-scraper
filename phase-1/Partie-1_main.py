@@ -2,10 +2,11 @@ import os
 import requests
 from bs4 import BeautifulSoup
 import csv
-import re	
+import re
 
-###### LA FONCTION : parse_links_products_pages(): ######
-#-------------------------------------------------------#
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#       LA FONCTION : parse_links_products_pages():       #
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 # La fonction "parse_links_products_pages" commence par envoyer une requête HTTP à l'URL 
 # spécifiée en utilisant la méthode "get" de l'objet "requests" et en stockant la réponse dans 
@@ -16,7 +17,7 @@ def parse_links_products_pages():
     url = "https://books.toscrape.com/catalogue/category/books/childrens_11/page-1.html"
     page = requests.get(url)
     soup_product_page = BeautifulSoup(page.content, "html.parser")
-    
+
     # La méthode "find_all" de l'objet "soup_product_page" est utilisée pour récupérer tous 
     # les éléments "h3" de la page HTML. Ces éléments représentent le titre des produits de 
     # la page et contiennent un lien vers la page du produit.
@@ -28,8 +29,7 @@ def parse_links_products_pages():
     # le lien vers la page du produit."""
     list_links_products_pages = []
     for item in main_div:
-
-        # Le lien du produit est ensuite construit en concaténant la chaîne de caractères 
+        # Le lien du produit est ensuite construit en concaténant la chaîne de caractères
         # "https://books.toscrape.com/catalogue/" avec l'élément de l'attribut "href" du lien, 
         # en omettant les neuf premiers caractères de la chaîne (car ils représentent le chemin de base 
         # du site web)."""
@@ -41,10 +41,12 @@ def parse_links_products_pages():
 
     # Enfin, la liste des liens de produits est renvoyée à l'appelant de la fonction."""        
     return list_links_products_pages
-#-------------------------------------------------------#
-###### LA FONCTION : parse_product_page(url_product): ######
-#-------------------------------------------------------#
-# La fonction nommée "parse_product_page" qui prend en entrée une URL de produit (variable "url_product") et qui retourne 
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#     LA FONCTION : parse_product_page(url_product):     #
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+# La fonction nommée "parse_product_page" qui prend en entrée une URL de produit (variable "url_product") et qui retourne
 # trois variables en sortie : "product_page_info", "image_url_text" et "universal_product_code".
 
 # La fonction commence par faire une requête à l'URL donnée en utilisant la bibliothèque "requests" et stocke la réponse 
@@ -78,7 +80,8 @@ def parse_product_page(url_product):
 
     # Pour trouver  l'élément HTML contenant la description du produit, s'il existe, et stockent sa valeur 
     # dans la variable "product_description". Elles trouvent également l'élément HTML contenant la catégorie du produit 
-    # en utilisant la méthode find_all() de BeautifulSoup, puis stockent la valeur de la troisième balise <a> dans la variable "category".
+    # en utilisant la méthode find_all() de BeautifulSoup, puis stockent la valeur de la troisième balise <a> dans la
+    # variable "category".
     product_description_div = soup_page.find(id="product_description")
     product_description = ""
     if product_description_div:
@@ -88,13 +91,14 @@ def parse_product_page(url_product):
     list_breadcrumb = breadcrumb.find_all("a")
     category = list_breadcrumb[2].string
 
-    # Pour trouver l’element HTML contenant la note de l'examen (review_rating) du produit et stocke sa valeur dans la variable "review_rating".
+    # Pour trouver l’element HTML contenant la note de l'examen (review_rating) du produit et stocke sa valeur dans la
+    # variable "review_rating".
     review_rating = soup_page.find("p", class_="star-rating")["class"][1]
 
-
-    # La ligne suivante trouve l'élément HTML contenant l'URL de l'image du produit et stocke sa valeur dans la variable "image_url". 
-    # La ligne suivante construit l'URL complète de l'image en utilisant la concaténation de chaînes de caractères, en ajoutant le nom 
-    # de domaine "https://books.toscrape.com" et en enlevant les cinq premiers caractères de la valeur de "src" dans "image_url".
+    # La ligne suivante trouve l'élément HTML contenant l'URL de l'image du produit et stocke sa valeur dans la variable
+    # "image_url". La ligne suivante construit l'URL complète de l'image en utilisant la concaténation de chaînes de
+    # caractères, en ajoutant le nom de domaine "https://books.toscrape.com" et en enlevant les cinq premiers caractères
+    # de la valeur de "src" dans "image_url".
     image_url = soup_page.find("div", class_="carousel-inner").find_next("img")
     image_url_text = "https://books.toscrape.com" + image_url["src"][5:]
 
@@ -110,9 +114,10 @@ def parse_product_page(url_product):
         review_rating,
         image_url_text
     ]
-    # Création d'une liste contenant toutes les informations extraites du produit, puis retourne cette liste, l'URL de l'image et 
-    # le code produit universel.
+    # Création d'une liste contenant toutes les informations extraites du produit, puis retourne cette liste, l'URL de
+    # l'image et le code produit universel.
     return product_page_info, image_url_text, universal_product_code
+
 
 # Déclaration de variable "url_base" qui contient l'URL de base pour le site "http://books.toscrape.com/".
 url_base = "https://books.toscrape.com/catalogue/category/books/childrens_11/page-1.html"
@@ -125,15 +130,18 @@ page = requests.get(url_base)
 # dans une variable soup."""
 soup = BeautifulSoup(page.content, "html.parser")
 
-# La variable "categories_div" utilise la méthode "find "de l'objet "soup" pour rechercher un élément "div" ayant une classe "side_categories".
+# La variable "categories_div" utilise la méthode "find "de l'objet "soup" pour rechercher un élément "div" ayant une
+# classe "side_categories".
 categories_div = soup.find("div", class_="side_categories")
 
-# Utilisation de la méthode "find_all" de l'objet "categories_div" pour récupérer tous les liens "a" contenus dans la variable categories_div.
+# Utilisation de la méthode "find_all" de l'objet "categories_div" pour récupérer tous les liens "a" contenus dans la
+# variable categories_div.
 links_categories = categories_div.find_all("a")
 
-# La variable "list_links_categories" est une liste vide qui est ensuite remplie en utilisant une boucle "for" pour parcourir chaque élément 
-# de "links_categories" à partir du deuxième élément, qui est ignoré. Dans chaque itération de la boucle, la variable "link" est mise à jour 
-# en concaténant l'URL de base avec l'attribut "href" de l'élément "a". Ensuite, le lien mis à jour est ajouté à la liste "list_links_categories".
+# La variable "list_links_categories" est une liste vide qui est ensuite remplie en utilisant une boucle "for" pour
+# parcourir chaque élément de "links_categories" à partir du deuxième élément, qui est ignoré. Dans chaque itération de
+# la boucle, la variable "link" est mise à jour en concaténant l'URL de base avec l'attribut "href" de l'élément "a".
+# Ensuite, le lien mis à jour est ajouté à la liste "list_links_categories".
 list_links_categories = []
 for link in links_categories[1:]:
     link = url_base + link["href"]
@@ -169,3 +177,4 @@ with open("result/data_" + category_name + ".csv", "w", newline="", encoding="ut
         product_info = parse_product_page(link_product)
         writer.writerow(product_info[0])
 
+print("Téléchargement terminé avec succès !")
