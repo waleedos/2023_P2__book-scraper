@@ -119,34 +119,68 @@ def get_books_data(url):
     return links
 
 
-# Création de la Fonction  "save_img" qui prend trois arguments : url, category_name, et path. Elle a pour but de télécharger une image à partir de l'URL fournie (url), et de la sauvegarder dans un dossier appelé "images", qui est organisé en sous-dossiers pour chaque catégorie d'images (category_name). L'image téléchargée sera enregistrée avec un nom de fichier spécifié par l'argument path.
+# Création de la Fonction  "save_img" qui prend trois arguments : url, category_name, et path. Elle a pour but de télécharger 
+# une image à partir de l'URL fournie (url), et de la sauvegarder dans un dossier appelé "images", qui est organisé en 
+# sous-dossiers pour chaque catégorie d'images (category_name). L'image téléchargée sera enregistrée avec un nom de fichier 
+# spécifié par l'argument path.
 # Définition de la Fonction appelée save_img qui prend trois paramètres : url, category_name, et path.
 def save_img(url, category_name, path):
 
-    # Nous utilisons la bibliothèque requests pour envoyer une requête HTTP à l'URL fournie (url) et stocker la réponse dans la variable res.
+    # Nous utilisons la bibliothèque requests pour envoyer une requête HTTP à l'URL fournie (url) et stocker la réponse dans 
+    # la variable res.
     res = requests.get(url)
 
-    # Nous utilisons la bibliothèque os pour créer deux dossiers : un dossier appelé "images" à la racine du projet (si ce dossier n'existe pas déjà), et un sous-dossier appelé category_name dans le dossier "images" (si ce sous-dossier n'existe pas déjà). exist_ok=True permet de ne pas lever d'exception si les dossiers existent déjà.
+    # Nous utilisons la bibliothèque os pour créer deux dossiers : un dossier appelé "images" à la racine du projet (si ce 
+    # dossier n'existe pas déjà), et un sous-dossier appelé category_name dans le dossier "images" (si ce sous-dossier 
+    # n'existe pas déjà). exist_ok=True permet de ne pas lever d'exception si les dossiers existent déjà.
     os.makedirs('images', exist_ok=True)
     os.makedirs('images/'+ category_name, exist_ok=True)
 
-    # Nous utilisons la syntaxe with open() pour ouvrir un fichier en mode binaire ('wb') dans le sous-dossier category_name du dossier "images". Le nom de fichier est déterminé par l'argument path, avec l'extension .jpg.
+    # Nous utilisons la syntaxe with open() pour ouvrir un fichier en mode binaire ('wb') dans le sous-dossier category_name 
+    # du dossier "images". Le nom de fichier est déterminé par l'argument path, avec l'extension .jpg.
     with open ('images/'+  category_name + '/' + path + '.jpg', 'wb') as img_file:
 
-        # Et enfin Nous écrivons le contenu de la réponse HTTP (res.content) dans le fichier que nous avons ouvert à l'étape précédente.
+        # Et enfin Nous écrivons le contenu de la réponse HTTP (res.content) dans le fichier que nous avons ouvert à l'étape 
+        # précédente.
         img_file.write(res.content)
 
 
-# Définit le lien de la catégorie à scrapper
+# Définit le lien de la catégorie en créant une variable "category_url" qui contient l'URL de la page web de la catégorie des 
+# livres à scraper
 category_url = 'https://books.toscrape.com/catalogue/category/books/childrens_11/index.html'
-# Récupère le nom de la catégorie à partir du lien
+
+# Récupère le nom de la catégorie à partir du lien en utilisant la méthode split() pour diviser l'URL en segments. Ensuite, 
+# elle sélectionne l'avant-dernier segment, qui contient le nom de la catégorie, et le stocke dans une variable 
+# appelée "category_name".
 category_name = category_url.split('/')[-2]
 
+# Utilisation de la fonction makedirs() du module os pour créer un dossier nommé "data_csv". L'argument exist_ok=True permet 
+# de ne pas lever d'erreur si le dossier existe déjà.
 os.makedirs('data_csv', exist_ok=True)
+
+# Ouvre un fichier CSV dans le dossier "data_csv" avec le nom de la catégorie suivi de ".csv". L'argument 'w' indique que le fichier 
+# sera ouvert en mode écriture. Le paramètre encoding='utf-8' indique que le fichier utilise l'encodage UTF-8.
 with open('data_csv/' + category_name + '.csv', 'w', encoding='utf-8') as csvfile:
+
+    # Création d’un objet "writer" à partir de la classe writer du module csv. L'objet "writer" permet d'écrire des lignes dans 
+    # le fichier CSV. Le paramètre delimiter=',' indique que les données seront séparées par une virgule.
     writer = csv.writer(csvfile, delimiter=',')
+
+    # Puis nous utilisons ici la méthode writerow() de l'objet "writer" pour écrire la première ligne du fichier CSV. Cette ligne 
+    # contient les noms des colonnes du fichier.
     writer.writerow(["universal_product_code","title","price_including_tax","price_excluding_tax","number_available","product_description","category","review_rating","image_url"])
+
+    # Nous utilisons une boucle for pour parcourir tous les liens de livres de la catégorie. La fonction "get_books_data" est 
+    # appelée pour récupérer les liens de tous les livres de la catégorie.
     for url in get_books_data(category_url):
+
+        # Utilisation de la fonction "get_book" pour récupérer toutes les informations sur un livre donné.
         book = get_book(url)
+
+        # Nous ecrivons avec la méthode writerow() de l'objet "writer" les informations sur le livre dans le fichier CSV.
         writer.writerow([book['universal_product_code'],book['title'],book['price_including_tax'],book['price_excluding_tax'],book['number_available'],book['product_description'],book['category'],book['review_rating'],book['image_url']])
+
+        # Appelle de la fonction "save_img" en lui passant trois arguments : "url", "category_name", et "path" pour télécharger 
+        # l'image à partir de l'URL et la sauvegarder dans un dossier spécifique. Le nom de fichier est généré en combinant le nom 
+        # de la catégorie et le code produit universel (UPC) du livre, qui sont fournis en arguments.
         save_img(url = book['image_url'], category_name = book['category'], path = book['universal_product_code'])
