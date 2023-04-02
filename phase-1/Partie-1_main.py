@@ -8,7 +8,7 @@ import re
 #       LA FONCTION : parse_links_products_pages():       #
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-# La fonction "parse_links_products_pages" commence par envoyer une requête HTTP à l'URL 
+# La fonction "parse_links_products_pages" commence par envoyer une requête HTTP à l'URL
 # spécifiée en utilisant la méthode "get" de l'objet "requests" et en stockant la réponse dans 
 # la variable "page". Cette réponse est ensuite passée en argument à la méthode "BeautifulSoup" 
 # pour créer un objet "soup_product_page" qui contient la structure HTML de la page."""
@@ -46,6 +46,8 @@ def parse_links_products_pages():
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 #     LA FONCTION : parse_product_page(url_product):     #
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
 # La fonction nommée "parse_product_page" qui prend en entrée une URL de produit (variable "url_product") et qui retourne
 # trois variables en sortie : "product_page_info", "image_url_text" et "universal_product_code".
 
@@ -58,6 +60,7 @@ def parse_product_page(url_product):
 
     # Définition d’une variable "product_page_url" en lui donnant la valeur de "url_product".
     product_page_url = url_product
+    
     # Trouver l'élément HTML contenant le code produit universel (UPC) et stocke sa valeur dans la variable "universal_product_code".
     universal_product_code = soup_page.find(string="UPC").next_element.string
 
