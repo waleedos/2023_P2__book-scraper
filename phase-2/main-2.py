@@ -119,12 +119,23 @@ def get_books_data(url):
     return links
 
 
+# Création de la Fonction  "save_img" qui prend trois arguments : url, category_name, et path. Elle a pour but de télécharger une image à partir de l'URL fournie (url), et de la sauvegarder dans un dossier appelé "images", qui est organisé en sous-dossiers pour chaque catégorie d'images (category_name). L'image téléchargée sera enregistrée avec un nom de fichier spécifié par l'argument path.
+# Définition de la Fonction appelée save_img qui prend trois paramètres : url, category_name, et path.
 def save_img(url, category_name, path):
+
+    # Nous utilisons la bibliothèque requests pour envoyer une requête HTTP à l'URL fournie (url) et stocker la réponse dans la variable res.
     res = requests.get(url)
+
+    # Nous utilisons la bibliothèque os pour créer deux dossiers : un dossier appelé "images" à la racine du projet (si ce dossier n'existe pas déjà), et un sous-dossier appelé category_name dans le dossier "images" (si ce sous-dossier n'existe pas déjà). exist_ok=True permet de ne pas lever d'exception si les dossiers existent déjà.
     os.makedirs('images', exist_ok=True)
     os.makedirs('images/'+ category_name, exist_ok=True)
+
+    # Nous utilisons la syntaxe with open() pour ouvrir un fichier en mode binaire ('wb') dans le sous-dossier category_name du dossier "images". Le nom de fichier est déterminé par l'argument path, avec l'extension .jpg.
     with open ('images/'+  category_name + '/' + path + '.jpg', 'wb') as img_file:
+
+        # Et enfin Nous écrivons le contenu de la réponse HTTP (res.content) dans le fichier que nous avons ouvert à l'étape précédente.
         img_file.write(res.content)
+
 
 # Définit le lien de la catégorie à scrapper
 category_url = 'https://books.toscrape.com/catalogue/category/books/childrens_11/index.html'
