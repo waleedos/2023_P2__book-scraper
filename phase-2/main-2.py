@@ -75,21 +75,49 @@ def get_book(link):
         'image_url' : urljoin(link,image_url)
     }
 
+# Création d’une Fonction "get_books_data" qui récupère les liens des pages de tous les livres de la catégorie sélectionnée. 
+# Elle prend en entrée l'URL de la page principale de la catégorie et renvoie une liste de liens vers les pages de chaque livre 
+# de la catégorie.
+# Définition de la fonction "get_books_data" qui prend l'URL de la page principale de la catégorie comme argument :
 def get_books_data(url):
+
+    # Initialisation d’une liste vide pour stocker les liens vers les pages des livres :
     links = []
+
+    # Utilisation du module "requests" pour récupérer le contenu HTML de la page principale de la catégorie :
     r = requests.get(url)
+
+    # Utilisation du mode "BeautifulSoup" pour analyser le contenu HTML et en extraire les éléments souhaités :
     soup = BeautifulSoup(r.content, 'html.parser')
+
+    # Nous utilisons une boucle "for" pour parcourir tous les éléments HTML de type "article" qui ont la classe "product_pod" :
     for books in soup.find_all('article', class_='product_pod'):
+
+        # Recherche de l'élément HTML "a" qui contient l'URL de la page du livre :
         books_link_url = books.find('a', href = True)
+
+        # Extraire l'URL de la page du livre à partir de l'élément HTML "a" trouvé précédemment :
         books_url = books_link_url.get('href')
+
+        # Nous utilisons maintenant la fonction "urljoin" du module "urllib.parse" pour combiner l'URL de la page principale de 
+        # la catégorie avec l'URL de la page du livre pour former un lien complet :
         links.append(urljoin(url,books_url))
+
+    # Nous trouvons l'élément HTML "li" qui a la classe "next" pour vérifier s'il y a une page suivante dans cette catégorie 
+    # actuelle
     next = soup.find('li', class_='next')
+
+    # Si nous trouvons "une page suivante" qui existe, les lignes suivantes extraient l'URL de la page suivante, l'ajoutent à 
+    # la liste des liens et rappellent la fonction "get_books_data" pour extraire les liens de la page suivante :
     if next is not None:
         next_page = url.split('/')[0 : -1]
         next_page.append(next.find('a').get('href'))
         next_page_url = '/'.join(next_page)
         links.extend(get_books_data(next_page_url))
+
+    # Enfin, la fonction "get_books_data" renvoie la liste complète des liens de toutes les pages de livres de la catégorie :
     return links
+
 
 def save_img(url, category_name, path):
     res = requests.get(url)
