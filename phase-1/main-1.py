@@ -77,7 +77,7 @@ def get_book(link):
     }
 
 # Définit une fonction nommée "save_img" qui prend trois arguments: "url", "category_name" et "path".
-def save_img(url, category_name, path):
+def save_img(url, category_name, path, title):
 
     # La fonction "save_img" utilise la bibliothèque "requests" pour effectuer une demande "get" sur l'URL fournie en tant 
     # qu'argument "url". La réponse est stockée dans la variable "res".
@@ -91,7 +91,7 @@ def save_img(url, category_name, path):
     # Utilisation d'une instruction "with open" pour ouvrir un fichier dans le répertoire "images/nom_de_la_catégorie" et 
     # avec un nom de fichier basé sur l'argument "path". Le fichier est ouvert en mode binaire d'écriture "wb". 
     # Le contenu de la réponse "res" est écrit dans ce fichier en utilisant la méthode "write".
-    with open ('images/'+  category_name + '/' + path + '.jpg', 'wb') as img_file:
+    with open ('images/'+  category_name + '/' + title + '.jpg', 'wb') as img_file:
         img_file.write(res.content)
 
 # Déclaration du lien de la page du livre souhaité
@@ -115,6 +115,6 @@ with open('data_csv/book.csv', 'w', encoding='utf-8') as csvfile:
     # Appelle la fonction "save_img" en utilisant les valeurs de "url", "category_name" et "path" qui sont stockées dans "book". 
     # Cette fonction enregistre une image en utilisant l'URL fournie et en la plaçant dans un répertoire basé sur la catégorie 
     # et le chemin.
-    save_img(url = book['image_url'], category_name = book['category'], path = book['universal_product_code'])
+    save_img(url=book['image_url'], category_name=book['category'], path=book['universal_product_code'], title=book['title'])
 
 print("Téléchargement terminé avec succès !")    

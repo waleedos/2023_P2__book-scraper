@@ -124,7 +124,7 @@ def get_books_data(url):
 # sous-dossiers pour chaque catégorie d'images (category_name). L'image téléchargée sera enregistrée avec un nom de fichier 
 # spécifié par l'argument path.
 # Définition de la Fonction appelée save_img qui prend trois paramètres : url, category_name, et path.
-def save_img(url, category_name, path):
+def save_img(url, category_name, path, title):
 
     # Nous utilisons la bibliothèque requests pour envoyer une requête HTTP à l'URL fournie (url) et stocker la réponse dans 
     # la variable res.
@@ -138,11 +138,12 @@ def save_img(url, category_name, path):
 
     # Nous utilisons la syntaxe with open() pour ouvrir un fichier en mode binaire ('wb') dans le sous-dossier category_name 
     # du dossier "images". Le nom de fichier est déterminé par l'argument path, avec l'extension .jpg.
-    with open ('images/'+  category_name + '/' + path + '.jpg', 'wb') as img_file:
+    with open ('images/'+  category_name + '/' + title + '.jpg', 'wb') as img_file:
 
         # Et enfin Nous écrivons le contenu de la réponse HTTP (res.content) dans le fichier que nous avons ouvert à l'étape 
         # précédente.
         img_file.write(res.content)
+
 
 
 # Définit le lien de la catégorie en créant une variable "category_url" qui contient l'URL de la page web de la catégorie des 
@@ -183,6 +184,6 @@ with open('data_csv/' + category_name + '.csv', 'w', encoding='utf-8') as csvfil
         # Appelle de la fonction "save_img" en lui passant trois arguments : "url", "category_name", et "path" pour télécharger 
         # l'image à partir de l'URL et la sauvegarder dans un dossier spécifique. Le nom de fichier est généré en combinant le nom 
         # de la catégorie et le code produit universel (UPC) du livre, qui sont fournis en arguments.
-        save_img(url = book['image_url'], category_name = book['category'], path = book['universal_product_code'])
+        save_img(url=book['image_url'], category_name=book['category'], path=book['universal_product_code'], title=book['title'])
 
 print("Téléchargement terminé avec succès !")
