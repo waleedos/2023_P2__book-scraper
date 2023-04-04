@@ -116,3 +116,5 @@ with open('data_csv/book.csv', 'w', encoding='utf-8') as csvfile:
     # Cette fonction enregistre une image en utilisant l'URL fournie et en la plaçant dans un répertoire basé sur la catégorie 
     # et le chemin.
     save_img(url = book['image_url'], category_name = book['category'], path = book['universal_product_code'])
+
+print("Téléchargement terminé avec succès !")    

@@ -78,3 +78,4 @@ for category_name,category_url in get_categories('https://books.toscrape.com/').
             writer.writerow([book['universal_product_code'],book['title'],book['price_including_tax'],book['price_excluding_tax'],book['number_available'],book['product_description'],book['category'],book['review_rating'],book['image_url']])
             save_img(url = book['image_url'], category_name = book['category'], path = book['universal_product_code'])
 
+print("Téléchargement terminé avec succès !") 

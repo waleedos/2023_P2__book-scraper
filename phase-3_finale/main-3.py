@@ -234,3 +234,5 @@ for category_name,category_url in get_categories('https://books.toscrape.com/').
             # prend trois arguments : l'URL de l'image, le nom de la catégorie et le code du livre.
             save_img(url = book['image_url'], category_name = book['category'], path = book['universal_product_code'])
 
+print("Téléchargement terminé avec succès !")          
+

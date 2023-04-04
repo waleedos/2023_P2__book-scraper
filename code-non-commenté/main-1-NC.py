@@ -47,3 +47,6 @@ with open('data_csv/book.csv', 'w', encoding='utf-8') as csvfile:
     writer.writerow(["universal_product_code","title","price_including_tax","price_excluding_tax","number_available","product_description","category","review_rating","image_url"])
     writer.writerow([book['universal_product_code'],book['title'],book['price_including_tax'],book['price_excluding_tax'],book['number_available'],book['product_description'],book['category'],book['review_rating'],book['image_url']])
     save_img(url = book['image_url'], category_name = book['category'], path = book['universal_product_code'])
+
+print("Téléchargement terminé avec succès !")
+    

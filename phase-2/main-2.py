@@ -184,3 +184,5 @@ with open('data_csv/' + category_name + '.csv', 'w', encoding='utf-8') as csvfil
         # l'image à partir de l'URL et la sauvegarder dans un dossier spécifique. Le nom de fichier est généré en combinant le nom 
         # de la catégorie et le code produit universel (UPC) du livre, qui sont fournis en arguments.
         save_img(url = book['image_url'], category_name = book['category'], path = book['universal_product_code'])
+
+print("Téléchargement terminé avec succès !")
