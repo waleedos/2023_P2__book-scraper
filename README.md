@@ -53,6 +53,11 @@ Remplire et installer les modules prerequis à partir de du fichier "requirement
 pip install -r requirements.txt
 ```
 ## Fonctionnement :
+Mettez vous a la racine du repertoire "le-scrypt" avec la commande suivante :
+```
+cd le-scrypt
+```
+
 Démarrez le scrypt avec la commande :
 ```
 python main.py
@@ -61,6 +66,21 @@ Ou bien
 ```
 python3 main.py
 ```
+## Mes suggestions pour l’amélioration de ce Scrypt : 
+Utiliser une bibliothèque de scraping dédiée, telle que Scrapy, pour faciliter grandement  la collecte des données, car elle est conçue spécifiquement pour cette tâche et offre des fonctionnalités avancées telles que la gestion des proxies, le traitement en parallèle des pages, la gestion de la pagination, etc. 
 
+Mettre tout le catalogue de tout le site internet dans un seul fichier .CSV tout en ajoutant une colonne par connaître les catégories, cela rendra la lecture et l’analyse des données beaucoup plus facile.
+
+Ajouter des fonctions de validation  telles que la vérification de la structure des données, la validation des champs, etc, pour s'assurer que les données collectées sont correctes et éviter les erreurs : Il est important de valider les données collectées pour éviter les erreurs dans le traitement des données.
+
+Ajouter une gestion d'erreurs plus robuste pour éviter les plantages du programme en cas d'erreur : Le scraping peut être assez imprévisible, donc il est important d'avoir une gestion d'erreurs solide pour éviter que le programme plante en cas d'erreur. Les erreurs courantes peuvent inclure une connexion interrompue, un serveur indisponible, une page indisponible, etc.
+
+Utiliser des fonctions de log qui permettent de suivre les activités du programme, telles que les requêtes HTTP, les réponses, les erreurs, etc,  pour faciliter le débogage : Cela peut aider à identifier les problèmes plus rapidement.
+
+Éviter les boucles imbriquées pour améliorer la lisibilité et les performances du code : Les boucles imbriquées peuvent rendre le code difficile à lire et à maintenir, en particulier pour les projets plus importants. Il est important de limiter l'utilisation de boucles imbriquées pour améliorer la lisibilité et les performances du code.
+
+Utiliser des outils d'analyse de code tels que pylint pour détecter les erreurs et les problèmes de style : Les outils d'analyse de code peuvent aider à détecter les erreurs et les problèmes de style dans le code. Pylint est un outil populaire pour Python qui peut détecter les erreurs de syntaxe, les erreurs de style, les erreurs de logique, etc.
+
+Optimiser le code pour améliorer les performances, par exemple en utilisant des techniques de traitement par lots pour éviter de surcharger les serveurs cibles : Le scraping peut être une tâche gourmande en ressources, donc il est important d'optimiser le code pour améliorer les performances et éviter de surcharger les serveurs cibles. Les techniques de traitement par lots peuvent aider à réduire la charge sur les serveurs en collectant les données en blocs plutôt que page par page.
 
 ### Powered by EL-WALID EL-KHABOU
