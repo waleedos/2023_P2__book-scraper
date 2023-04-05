@@ -185,7 +185,13 @@ def save_img(url, category_name, path, title):
     # un répertoire pour stocker les images de la catégorie donnée par category_name.
     os.makedirs('images', exist_ok=True)
     os.makedirs('images/'+ category_name, exist_ok=True)
+    
+    # création d'un chemin de fichier pour l'image en utilisant les noms de catégorie et de titre de livre, 
+    # ainsi que l'extension ".jpg".  
     img_path = os.path.join('images', category_name, title + '.jpg')
+    
+    # création récursive des répertoires nécessaires pour stocker le fichier image à l'emplacement donné par img_path. 
+    # La fonction os.makedirs() crée tous les répertoires intermédiaires nécessaires.
     os.makedirs(os.path.dirname(img_path), exist_ok=True)    
 
     # Ouverture d’un fichier dans le répertoire correspondant avec un nom qui combine category_name et path avec
@@ -198,6 +204,8 @@ def save_img(url, category_name, path, title):
         img_file.write(res.content)
 
 #--------------------------------------------#
+# afficher un message au début du programme pour indiquer que le téléchargement est en cours, et à la fin de chaque 
+# boucle de catégorie pour indiquer que la catégorie a été traitée avec succès. 
 if __name__ == '__main__':
     print("Téléchargement en cours ... veuillez patienter !")
 
