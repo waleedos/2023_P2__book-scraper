@@ -185,54 +185,60 @@ def save_img(url, category_name, path, title):
     # un répertoire pour stocker les images de la catégorie donnée par category_name.
     os.makedirs('images', exist_ok=True)
     os.makedirs('images/'+ category_name, exist_ok=True)
+    img_path = os.path.join('images', category_name, title + '.jpg')
+    os.makedirs(os.path.dirname(img_path), exist_ok=True)    
 
     # Ouverture d’un fichier dans le répertoire correspondant avec un nom qui combine category_name et path avec
     # une extension de fichier ".jpg", et utilise le mode d'écriture binaire ('wb') pour écrire le contenu de l'image
     # dans le fichier.
-    with open ('images/'+  category_name + '/' + title + '.jpg', 'wb') as img_file:
+    with open(img_path, 'wb') as img_file:
 
     # Enfin, la dernière ligne écrit le contenu de l'image (stocké dans la variable res.content) dans le fichier
     # ouvert avec la méthode write().
         img_file.write(res.content)
 
 #--------------------------------------------#
-# Utilisation de la 2eme Fonction "get_categories" pour récupérer les noms et les URL de chaque catégorie de livres
-# sur le site web. Ensuite, elle parcourt chaque paire nom / URL à l'aide de la boucle "for" et les stocke dans
-# les variables "category_name" et "category_url".
-for category_name,category_url in get_categories('https://books.toscrape.com/').items():
+if __name__ == '__main__':
+    print("Téléchargement en cours ... veuillez patienter !")
 
-    # Création d’un dossier "data_csv" pour stocker les fichiers CSV qui seront créés pour chaque catégorie de livres.
-    # Si le dossier existe déjà, la fonction ne fera rien grâce à l'argument "exist_ok=True".
-    os.makedirs('data_csv', exist_ok=True)
+    # Utilisation de la 2eme Fonction "get_categories" pour récupérer les noms et les URL de chaque catégorie de livres
+    # sur le site web. Ensuite, elle parcourt chaque paire nom / URL à l'aide de la boucle "for" et les stocke dans
+    # les variables "category_name" et "category_url".
+    for category_name,category_url in get_categories('https://books.toscrape.com/').items():
 
-    # Ouverture du fichier CSV portant le nom de la catégorie en cours de traitement. Le mode "w" signifie que le
-    # fichier sera ouvert en mode écriture et que tout ce qui est déjà dans le fichier sera supprimé.
-    # L'argument "encoding" est utilisé pour spécifier l'encodage du fichier CSV.
-    with open('data_csv/' + category_name + '.csv', 'w', encoding='utf-8') as csvfile:
+        # Création d’un dossier "data_csv" pour stocker les fichiers CSV qui seront créés pour chaque catégorie de livres.
+        # Si le dossier existe déjà, la fonction ne fera rien grâce à l'argument "exist_ok=True".
+        os.makedirs('data_csv', exist_ok=True)
 
-        # Création d’un objet "writer" à partir du module CSV, qui permet d'écrire des données dans le fichier CSV
-        # ouvert précédemment. Le délimiteur "," est utilisé pour séparer les valeurs dans le fichier CSV.
-        writer = csv.writer(csvfile, delimiter=',')
+        # Ouverture du fichier CSV portant le nom de la catégorie en cours de traitement. Le mode "w" signifie que le
+        # fichier sera ouvert en mode écriture et que tout ce qui est déjà dans le fichier sera supprimé.
+        # L'argument "encoding" est utilisé pour spécifier l'encodage du fichier CSV.
+        with open('data_csv/' + category_name + '.csv', 'w', encoding='utf-8') as csvfile:
 
-        # Ecriture de la première ligne (entete) du fichier CSV qui contiendra les noms des colonnes.
-        writer.writerow(["universal_product_code","title","price_including_tax","price_excluding_tax","number_available","product_description","category","review_rating","image_url"])
+            # Création d’un objet "writer" à partir du module CSV, qui permet d'écrire des données dans le fichier CSV
+            # ouvert précédemment. Le délimiteur "," est utilisé pour séparer les valeurs dans le fichier CSV.
+            writer = csv.writer(csvfile, delimiter=',')
 
-        # Utilisation de la 3eme Fonction "get_books_data" pour récupérer l'URL de chaque livre de la catégorie en
-        # cours de traitement, puis parcourt chaque URL à l'aide de la boucle "for" et stocke l'URL dans
-        # la variable "url".
-        for url in get_books_data(category_url):
+            # Ecriture de la première ligne (entete) du fichier CSV qui contiendra les noms des colonnes.
+            writer.writerow(["universal_product_code","title","price_including_tax","price_excluding_tax","number_available","product_description","category","review_rating","image_url"])
 
-            # Appel et utilisation de la 1ere Fonction "get_book" pour extraire les données de chaque livre à partir
-            # de son URL, puis stocke les données dans un dictionnaire appelé "book".
-            book = get_book(url)
+            # Utilisation de la 3eme Fonction "get_books_data" pour récupérer l'URL de chaque livre de la catégorie en
+            # cours de traitement, puis parcourt chaque URL à l'aide de la boucle "for" et stocke l'URL dans
+            # la variable "url".
+            for url in get_books_data(category_url):
 
-            # Ecriture des données du livre actuellement traité dans le fichier CSV. Les données sont extraites du
-            # dictionnaire "book" à l'aide des clés correspondantes.
-            writer.writerow([book['universal_product_code'],book['title'],book['price_including_tax'],book['price_excluding_tax'],book['number_available'],book['product_description'],book['category'],book['review_rating'],book['image_url']])
+                # Appel et utilisation de la 1ere Fonction "get_book" pour extraire les données de chaque livre à partir
+                # de son URL, puis stocke les données dans un dictionnaire appelé "book".
+                book = get_book(url)
 
-            # Utilise de la 4eme fonction "save_img" pour enregistrer l'image du livre actuellement traité. La fonction
-            # prend trois arguments : l'URL de l'image, le nom de la catégorie et le code du livre.
-            save_img(url=book['image_url'], category_name=book['category'], path=book['universal_product_code'], title=book['title'])
+                # Ecriture des données du livre actuellement traité dans le fichier CSV. Les données sont extraites du
+                # dictionnaire "book" à l'aide des clés correspondantes.
+                writer.writerow([book['universal_product_code'],book['title'],book['price_including_tax'],book['price_excluding_tax'],book['number_available'],book['product_description'],book['category'],book['review_rating'],book['image_url']])
+
+                # Utilise de la 4eme fonction "save_img" pour enregistrer l'image du livre actuellement traité. La fonction
+                # prend trois arguments : l'URL de l'image, le nom de la catégorie et le code du livre.
+                save_img(url=book['image_url'], category_name=book['category'], path=book['universal_product_code'], title=book['title'])
+        print("Catégorie " +"\""+ category_name + "\"" + " ... OK")
 
 print("Téléchargement terminé avec succès !")          
 
