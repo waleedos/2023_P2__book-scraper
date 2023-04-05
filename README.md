@@ -66,7 +66,7 @@ Ou bien
 ```
 python3 main.py
 ```
-## Mes suggestions pour l’amélioration de ce Scrypt : 
+## Mes suggestions pour l’amélioration de ce Script : 
 Utiliser une bibliothèque de scraping dédiée, telle que Scrapy, pour faciliter grandement  la collecte des données, car elle est conçue spécifiquement pour cette tâche et offre des fonctionnalités avancées telles que la gestion des proxies, le traitement en parallèle des pages, la gestion de la pagination, etc. 
 
 Mettre tout le catalogue de tout le site internet dans un seul fichier .CSV tout en ajoutant une colonne par connaître les catégories, cela rendra la lecture et l’analyse des données beaucoup plus facile.
