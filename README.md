@@ -3,7 +3,7 @@
 ## Préambule
 Projet réalisé dans le cadre de la formation Développeur d'Applications Python d'OpenClassrooms.
 Ce programme permet de scrapper et récupérer les données des fiches produits d'un site de vente de livres. Le programme va récupérer l'ensemble des catégories de livres et pour chacune d'entre elles, effectuer les opérations suivantes :
-Parcourir les pages produits des livres, puis en extraire les données pour les enregistrer dans un fichier CSV (Tous les livres de toutes les catégories), et Extraire les images des produits.
+Parcourir les pages produits des livres, puis en extraire les données pour les enregistrer dans un fichier CSV (Tous les livres de chaque catégories), et Extraire les images des produits.
 Si les répertoires dans lesquels nous stockons les images et les CSV sont inexistants, il les crées.
 
 Note : Ce code est optimisé pour un seul site. Il faudra donc l'adapter à vos besoins si vous souhaitez l'utiliser sur un autre site marchand.
@@ -12,6 +12,22 @@ Note : Ce code est optimisé pour un seul site. Il faudra donc l'adapter à vos 
 Vous êtes analyste marketing chez Books Online, une importante librairie en ligne spécialisée dans les livres d'occasion. Dans le cadre de vos fonctions, vous essayez de suivre manuellement les prix des livres d'occasion sur les sites web de vos concurrents, mais cela représente trop de travail et vous n'arrivez pas à y faire face : il y a trop de livres et trop de librairies en ligne ! Vous et votre équipe avez décidé d'automatiser cette tâche laborieuse via un programme (un scraper) développé en Python, capable d'extraire les informations tarifaires d'autres librairies en ligne.
 
 Notre mission est donc de développer une version bêta de ce système pour suivre les prix des livres chez [Books to Scrape](https://books.toscrape.com/), un revendeur de livres en ligne. En pratique, dans cette version bêta, votre programme n'effectuera pas une véritable surveillance en temps réel des prix sur la durée. Il s'agira simplement d'une application exécutable à la demande visant à récupérer les prix au moment de son exécution.
+
+
+## Les Balises et informations visées par ce Scarpp
+
+Name | Description
+------------|------------
+product_page_url | Le lien (URL) de la page du livre
+universal_ product_code (upc) | Le code unique (upc) de chaque livre 
+title | Le titre du livre
+price_including_tax | Le prix du livre (TTC)
+price_excluding_tax | Le prix du livre (HT)
+number_available | Quantité disponible en stock
+product_description | La description du livre
+category | La catégorie du Livre
+review_rating | La note du livre
+image_url | Le lien (URL) de l'image du livre
 
 
 ## Compétences évaluées
@@ -67,9 +83,9 @@ Ou bien
 python3 main.py
 ```
 ## Mes suggestions pour l’amélioration de ce Script : 
-Utiliser une bibliothèque de scraping dédiée, telle que Scrapy, pour faciliter grandement  la collecte des données, car elle est conçue spécifiquement pour cette tâche et offre des fonctionnalités avancées telles que la gestion des proxies, le traitement en parallèle des pages, la gestion de la pagination, etc. 
+Utiliser une bibliothèque de scraping dédiée, telle que Scrapy, pour faciliter grandement  la collecte des données, car elle est conçue spécifiquement pour cette tâche et offre des fonctionnalitées avancées telles que la gestion des proxies, le traitement en parallèle des pages, la gestion de la pagination, etc. 
 
-Mettre tout le catalogue de tout le site internet dans un seul fichier .CSV tout en ajoutant une colonne par connaître les catégories, cela rendra la lecture et l’analyse des données beaucoup plus facile.
+Mettre tout le catalogue du site internet dans un seul fichier .CSV tout en ajoutant une colonne pour connaître les catégories, cela rendra la lecture et l’analyse des données beaucoup plus facile.
 
 Ajouter des fonctions de validation  telles que la vérification de la structure des données, la validation des champs, etc, pour s'assurer que les données collectées sont correctes et éviter les erreurs : Il est important de valider les données collectées pour éviter les erreurs dans le traitement des données.
 
