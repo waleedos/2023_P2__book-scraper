@@ -119,7 +119,7 @@ def get_categories(url):
     return data
 
 #--------------------------------------------#
-# Création la Fonction "get_books_data" prenant un paramètre "url" comme entrée.
+# Création de la Fonction "get_books_data" prenant un paramètre "url" comme entrée.
 def get_books_data(url):
 
     # Initialisation d’une liste vide appelée "links" pour stocker les URL de pages de détails de livres.
@@ -167,7 +167,7 @@ def get_books_data(url):
     return links
 
 #--------------------------------------------#
-# Création d’un Fonction "save_img" qui télécharge une image à partir d'une URL donnée, la stocke dans un répertoire
+# Création d’une Fonction "save_img" qui télécharge une image à partir d'une URL donnée, la stocke dans un répertoire
 # "images" avec un sous-répertoire pour la catégorie spécifiée, et enregistre l'image sous le nom spécifié dans
 # le format ".jpg".
 # Cette Fonction prend trois arguments : url, category_name, et path.
